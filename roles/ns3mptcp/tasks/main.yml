@@ -1,0 +1,67 @@
+
+# Ansible's git module doesn't support specifying a branch name...
+- name: get mptcp code
+  command: chdir="{{ dce_dir }}/source" git clone -b {{ dce_mptcp_branch }} {{ dce_mptcp_repo }}
+
+- name: Add ns3-dce remote
+  command: chdir="{{ dce_dir }}/source/mptcp" git remote add dce git://github.com/direct-code-execution/net-next-sim.git
+  ignore_errors: yes
+
+- name: merge to mptcp code
+  command: chdir="{{ dce_dir }}/source/mptcp" {{ item }}
+  with_items:
+  - git fetch dce
+  - git merge "dce/sim-ns3-{{ dce_mptcp_net_next_sim_ver }}-branch"
+
+- name: patch a bit manually
+  lineinfile: >-
+    dest='{{ dce_dir }}/source/mptcp/arch/sim/defconfig'
+    state=present
+    insertafter=EOF
+    regexp='{{ item.regexp }}'
+    line='{{ item.line }}'
+  with_items:
+  - regexp: '^#?\s*CONFIG_MPTCP='
+    line: 'CONFIG_MPTCP=y'
+  - regexp: '^#?\s*CONFIG_MPTCP_PM_ADVANCED'
+    line: 'CONFIG_MPTCP_PM_ADVANCED=y'
+  - regexp: '^#?\s*CONFIG_MPTCP_FULLMESH'
+    line: 'CONFIG_MPTCP_FULLMESH=y'
+  - regexp: '^#?\s*CONFIG_MPTCP_NDIFFPORTS'
+    line: 'CONFIG_MPTCP_NDIFFPORTS=y'
+  - regexp: '^#?\s*CONFIG_DEFAULT_FULLMESH'
+    line: 'CONFIG_DEFAULT_FULLMESH=y'
+  - regexp: '^#?\s*CONFIG_DEFAULT_MPTCP_PM'
+    line: 'CONFIG_DEFAULT_MPTCP_PM="fullmesh"'
+  - regexp: '^#?\s*CONFIG_TCP_CONG_COUPLED'
+    line: 'CONFIG_TCP_CONG_COUPLED=y'
+  - regexp: '^#?\s*CONFIG_TCP_CONG_OLIA'
+    line: 'CONFIG_TCP_CONG_OLIA=y'
+
+- name: make
+  command: chdir="{{ dce_dir }}/source/mptcp" {{ item }}
+  with_items:
+  - make defconfig ARCH=sim
+  - make library ARCH=sim
+
+#- name: testbin
+#  command: chdir="{{ dce_dir }}/source/mptcp" make testbin -C arch/sim/test
+
+- name: get Linux library name
+  register: libsimname
+  shell: chdir="{{ dce_dir }}/source/mptcp" ls | egrep ^libsim-linux"{{ dce_mptcp_net_next_sim_ver_major }}\..*\.so"
+
+- name: copy the Linux kernel library to build/bin/dce/
+  shell: chdir="{{ dce_dir }}/source/mptcp" cp "{{ libsimname.stdout }}" ../../build/bin_dce/
+
+- name: set the liblinux.so simlimk to mptcps one
+  command: chdir="{{ dce_dir }}/build/bin_dce" ln -sf "{{ libsimname.stdout }}" liblinux.so
+
+- name: test mptcp simulation
+  command: chdir="{{ dce_dir }}/source/ns-3-dce" ./waf --run dce-iperf-mptcp
+
+- name: check output with pcap files
+  sudo: yes
+  register: mptcp_pkts
+  shell: chdir="{{ dce_dir }}/source/ns-3-dce" tcpdump -r iperf-mptcp-0-0.pcap | grep mptcp | head -n5
+- debug: var=mptcp_pkts

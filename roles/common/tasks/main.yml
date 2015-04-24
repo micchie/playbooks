@@ -1,0 +1,6 @@
+---
+# This playbook contains common plays that will be run on all nodes
+
+- file: path={{ ansible_env.HOME }}/deployed state=directory follow=yes
+- include: main-debian.yml
+  when: ansible_os_family == 'Debian'
