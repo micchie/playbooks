@@ -1,0 +1,15 @@
+---
+- name: install virtualenv in user
+  pip:
+    name: virtualenv
+    executable: pip3
+- name: Install PyTorch in virtualenv
+  environment:
+    PATH: "{{ home }}/.local/bin"
+  pip:
+    name: http://download.pytorch.org/whl/cpu/torch-0.3.0.post4-cp35-cp35m-linux_x86_64.whl
+    virtualenv: "{{ home }}/pytorch_env"
+- name: Install torchvision in virtualenv
+  pip:
+    name: torchvision
+    virtualenv: "{{ home }}/pytorch_env"
