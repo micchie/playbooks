@@ -1,0 +1,7 @@
+---
+- name: Install OpenCV
+  environment:
+    PATH: "{{ home }}/.local/bin"
+  pip:
+    name: opencv-python
+    virtualenv: "{{ home }}/keras_env"

@@ -1,0 +1,53 @@
+# Debian provisioning
+---
+- hosts: all
+  vars:
+    home: "/home/{{ user }}"
+    pytorch_packages:
+            - http://download.pytorch.org/whl/cpu/torch-0.3.0.post4-cp35-cp35m-linux_x86_64.whl
+            - torchvision
+  become: on
+  tasks:
+    - name: ensure basic packages
+      apt: name={{ item }} state=present update_cache=yes
+      with_items:
+        - git
+        - vim-nox
+        - zsh
+        - screen
+        - python-pip
+        - python3-pip
+    - name: set PATH for bash
+      lineinfile: >-
+        dest={{home}}/.bash_profile
+        create=yes
+        state=present
+        line='export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin'
+    - name: make ~/deployed
+      file: path={{home}}/deployed owner={{user}} mode=0777 state=directory
+
+    - name: create /etc/init/ttyS0.conf
+      blockinfile:
+        dest: /etc/init/ttyS0.conf
+        create: yes
+        state: present
+        block: |
+          start on stopped rc RUNLEVEL=[2345]
+          stop on runlevel [!2345]
+          respawn
+          exec /sbin/getty -8 115200 ttyS0
+
+    - name: grub cmd line for subsequent kernel install
+      lineinfile:
+        dest: /etc/default/grub
+        create: no
+        state: present
+        regexp: '^GRUB_CMDLINE_LINUX_DEFAULT'
+        line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet splash console=tty0 console=ttyS0,115200"'
+                
+- hosts: all
+  vars:
+    home: "/home/{{ user }}"
+    become: off
+  roles:
+    - pytorch

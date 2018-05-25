@@ -1,0 +1,16 @@
+# Debian provisioning
+---
+#- hosts: all
+#  vars:
+#    home: "/home/{{ user }}"
+#  become: on
+#  roles:
+#    - ml
+
+- hosts: all
+#  vars:
+#    home: "/home/{{ user }}"
+#    become: off
+  roles:
+    - ml
+    - pytorch

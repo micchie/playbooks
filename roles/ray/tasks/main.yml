@@ -1,0 +1,11 @@
+- name: Install Ray
+  environment:
+    PATH: "{{ home }}/.local/bin"
+  pip:
+    #name: ray
+    name: '{{ item }}'
+    virtualenv: "{{ home }}/pytorch_env"
+  with_items:
+  - psutil
+  - ray
+
