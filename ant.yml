@@ -1,7 +1,0 @@
-# Basic ANT configuration
-# one-liner execution:
-# ansible-playbook -i c237, --extra-vars "user=root" ./ant.yml
-#
-- hosts: all
-  roles:
-    - ant

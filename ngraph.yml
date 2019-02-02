@@ -1,0 +1,17 @@
+# Debian provisioning
+# In OSX, you may need to specify /usr/local/bin/pip3 at executable sections
+# see https://github.com/ansible/ansible-modules-core/issues/1656
+---
+#- hosts: all
+#  vars:
+#    home: "/home/{{ user }}"
+#  become: on
+#  roles:
+#    - ml
+#
+- hosts: all
+  #  vars:
+  #  home: "/home/{{ user }}"
+  #  become: off
+  roles:
+    - ngraph

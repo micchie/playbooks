@@ -2,5 +2,10 @@
 - name: install virtualenv in user
   pip:
     name: virtualenv
-    executable: pip3
+    executable: "{{ pip3_executable }}"
     extra_args: --user
+
+  #- name: install python3-tk
+  #  apt:
+  #    name: python3-tk
+  #  become: yes

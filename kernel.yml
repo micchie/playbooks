@@ -1,8 +1,6 @@
 # Debian provisioning
 ---
 - hosts: all
-  vars:
-    home: "/home/{{ user }}"
-  become: on
+  become: yes
   roles:
     - kernel

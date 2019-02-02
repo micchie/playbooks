@@ -1,0 +1,22 @@
+# based on https://github.com/NervanaSystems/ngraph-tf#using-os-x
+---
+- name: Install TensorFlow v1.12.0
+  environment:
+    HTTP_PROXY: http://192.168.0.1:8123
+    http_proxy: http://192.168.0.1:8123
+    HTTPS_PROXY: http://192.168.0.1:8123
+    https_proxy: http://192.168.0.1:8123
+  pip:
+    name: tensorflow
+    virtualenv: "{{ home }}/ngraph_env"
+
+- name: Install nGraph-TensorFlow bridge
+  environment:
+    HTTP_PROXY: http://192.168.0.1:8123
+    http_proxy: http://192.168.0.1:8123
+    HTTPS_PROXY: http://192.168.0.1:8123
+    https_proxy: http://192.168.0.1:8123
+  pip:
+    name: ngraph-tensorflow-bridge
+    virtualenv: "{{ home }}/ngraph_env"
+

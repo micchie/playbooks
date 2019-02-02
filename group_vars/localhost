@@ -1,0 +1,4 @@
+---
+# OSX
+pip3_executable:
+  /usr/local/bin/pip3

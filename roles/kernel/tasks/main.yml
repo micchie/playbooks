@@ -2,43 +2,27 @@
 #- file: path={{ ansible_env.HOME }}/deployed state=directory follow=yes
   #- include: main-debian.yml
   #when: ansible_os_family == 'Debian'
+  #
 - name: ensure basic packages
-  apt: name={{ item }} state=present update_cache=yes
-  with_items:
-    - git
-    - vim-nox
-    - zsh
-    - screen
-    - autoconf
-    - automake
-    - gcc
-    - build-essential
-    - libtool
-    - libncurses-dev
-    - tcpdump
-    - hfsprogs
-    - elfutils
-    - libdw-dev
-    - gettext
-    - flex
-    - bison
-    - pkg-config # for ndctl (until asciidoc)
-    - libjson-c-dev
-    - uuid-dev
-    - libudev-dev
-    - libkmod-dev
-    - asciidoc
-    - ethtool
-- name: set PATH for bash
+  become: yes
+  apt:
+    #libjson-c-dev - asciidoc are required for ndctl
+    pkg: {ethtool, autoconf, automake, gcc, build-essential, libtool,
+          libncurses-dev, tcpdump, hfsprogs, elfutils, libdw-dev, gettext,
+          flex, bison, pkg-config, libjson-c-dev, uuid-dev, libudev-dev,
+          libkmod-dev, asciidoc, libssl-dev, bc}
+    state: latest
+    update_cache: yes
+
+- name: set PATH for bash}
+  become: yes
   lineinfile: >-
     dest={{home}}/.bash_profile
     create=yes
     state=present
     line='export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin'
-  #    - name: make ~/deployed
-  #      file: path={{home}}/deployed owner={{user}} mode=0777 state=directory
-  #
 - name: create /etc/init/ttyS0.conf
+  become: yes
   blockinfile:
     dest: /etc/init/ttyS0.conf
     create: yes
@@ -56,5 +40,3 @@
     state: present
     regexp: '^GRUB_CMDLINE_LINUX_DEFAULT'
     line: 'GRUB_CMDLINE_LINUX_DEFAULT="memmap=1G!1G quiet splash console=tty0 console=ttyS0,115200"'
-- name: make ~/deployed
-  file: path={{home}}/deployed owner={{user}} mode=0777 state=directory

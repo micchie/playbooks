@@ -1,12 +1,11 @@
 ---
 - name: Install PyTorch in virtualenv
   environment:
-    PATH: "{{ home }}/.local/bin"
+    PATH: "{{ home }}/.local/bin:/usr/local/bin:{{ ansible_env.PATH }}"
   pip:
-    name: http://download.pytorch.org/whl/cpu/torch-0.3.0.post4-cp35-cp35m-linux_x86_64.whl
+    name: "{{ item }}"
     virtualenv: "{{ home }}/pytorch_env"
-- name: Install torchvision in virtualenv
-  pip:
-    name: torchvision
-    virtualenv: "{{ home }}/pytorch_env"
-
+    virtualenv_python: python3
+  loop:
+    - torch
+    - torchvision

@@ -1,7 +1,7 @@
 ---
 - name: Install TensorFlow
   environment:
-    PATH: "{{ home }}/.local/bin"
+    PATH: "{{ home }}/.local/bin:/usr/local/bin"
   pip:
     name: tensorflow
     virtualenv: "{{ home }}/keras_env"

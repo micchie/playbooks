@@ -1,0 +1,15 @@
+- name: Install dgraph
+  shell: curl https://get.dgraph.io -sSf | bash
+
+- name: Disable IPv6
+    lineinfile: >-
+        dest=/etc/sysctl.conf
+        create=yes
+        state=present
+        line='net.ipv6.conf.all.disable_ipv6 = 1'
+- name: Disable IPv6 (2)
+    lineinfile: >-
+        dest=/etc/sysctl.conf
+        create=yes
+        state=present
+        line='net.ipv6.conf.default.disable_ipv6 = 1'
