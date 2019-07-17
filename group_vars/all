@@ -2,4 +2,3 @@
 proxy_env: ''
 pip3_executable: pip3
 home: "{{ ansible_env.HOME }}"
-

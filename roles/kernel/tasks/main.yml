@@ -7,10 +7,30 @@
   become: yes
   apt:
     #libjson-c-dev - asciidoc are required for ndctl
-    pkg: {ethtool, autoconf, automake, gcc, build-essential, libtool,
-          libncurses-dev, tcpdump, hfsprogs, elfutils, libdw-dev, gettext,
-          flex, bison, pkg-config, libjson-c-dev, uuid-dev, libudev-dev,
-          libkmod-dev, asciidoc, libssl-dev, bc}
+    pkg:
+      - ethtool
+      - autoconf
+      - automake
+      - gcc
+      - build-essential
+      - libtool
+      - libncurses-dev
+      - tcpdump
+      - hfsprogs
+      - elfutils
+      - libdw-dev
+      - gettext
+      - flex
+      - bison
+      - pkg-config
+      - libjson-c-dev
+      - uuid-dev
+      - libudev-dev
+      - libkmod-dev
+      - asciidoc
+      - libssl-dev
+      - bc
+      - xfsprogs
     state: latest
     update_cache: yes
 

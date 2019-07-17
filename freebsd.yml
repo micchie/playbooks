@@ -1,37 +1,60 @@
 ---
 - hosts: all
-  become: yes
   tasks:
-    #- name: ensure basic packages
-    #  pkgng: name=git,vim-console,zsh,bash,screen,wrk,gdb state=present
+    - name: ensure basic packages
+      become: yes
+      pkgng: name=git,vim-console,zsh,bash,screen,wrk,gdb state=present
     - name: disable noisy banner which kills fabric
+      become_user: "{{ user }}"
       lineinfile: >-
         dest='{{home}}/.profile'
         regexp='.*freebsd\-tips.*'
         state=absent
     - name: link /bin/bash
+      become: yes
       shell: "! [ -f /bin/bash ] && ln -s /usr/local/bin/bash /bin/bash || true"
     - name: /bin/bash in /etc/shells
+      become: yes
       lineinfile: >-
         dest=/etc/shells
         create=no
         state=present
         line='/bin/bash'
-    - name: kernel dump
+    - name: dumpdev setting at /etc/rc.conf
+      become: yes
       lineinfile: >-
         dest=/etc/rc.conf
         create=no
         state=present
         line='dumpdev="AUTO"'
-    - name: kernel dump
+    - name: dumpdir setting at /etc/rc.conf
+      become: yes
       lineinfile: >-
         dest=/etc/rc.conf
         create=no
         state=present
         line='dumpdir="/var/crash"'
-    - name: make /var/crash
+    - name: create /var/crash
+      become: yes
       file: path=/var/crash owner=root mode=0700 state=directory
     - name: make /usr/src
+      become: yes
       file: path=/usr/src owner={{user}} mode=0777 state=directory
-    - name: make /usr/obj
+    - name: create /usr/obj
+      become: yes
       file: path=/usr/obj owner={{user}} mode=0777 state=directory
+    - name: create deployed directory
+      become_user: "{{ user }}"
+      file: path={{home}}/deployed owner={{user}} mode=0700 state=directory
+      #    - name: serial console (comment out because boot gets slow)
+      #      become: yes
+      #      lineinfile: >-
+      #        dest=/boot/loader.conf
+      #        create=yes
+      #        state=present
+      #        line={{ item }}
+      #      with_items:
+      #        - console="comconsole,vidconsole"
+      #        - boot_multicons="YES"
+      #        - boot_serial="YES"
+      #        - comconsole_speed="57600"

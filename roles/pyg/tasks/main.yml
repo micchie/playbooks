@@ -1,0 +1,14 @@
+---
+- name: Install PyTorch Geometoric in virtualenv
+  environment:
+    PATH: "{{ home }}/.local/bin:/usr/local/bin:{{ ansible_env.PATH }}"
+  pip:
+    name: "{{ item }}"
+    virtualenv: "{{ home }}/pytorch_env"
+    virtualenv_python: python3
+  loop:
+    - torch-scatter
+    - torch-sparse
+    - torch-cluster
+    - torch-spline-conv
+    - torch-geometric
