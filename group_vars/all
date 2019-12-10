@@ -1,4 +1,6 @@
 ---
-proxy_env: ''
-pip3_executable: pip3
+proxy_env:
+  HTTP_PROXY:
+os_pip3_executable: pip3
 home: "{{ ansible_env.HOME }}"
+venv_root: "{{ ansible_env.HOME }}"

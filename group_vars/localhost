@@ -1,4 +1,4 @@
 ---
-# OSX
-pip3_executable:
-  /usr/local/bin/pip3
+# Linux
+#os_pip3_executable:
+#  /usr/bin/pip3

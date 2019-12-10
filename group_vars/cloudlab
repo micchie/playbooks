@@ -1,0 +1,3 @@
+---
+ansible_become: yes	
+venv_root: "/usr/local"

@@ -1,11 +1,15 @@
 ---
-- name: install virtualenv in user
+- name: install python3.7
+  apt:
+    name: "{{ item }}"
+  loop:
+    - python3.7
+    - python3.7-dev
+    - python3-pip # XXX
+  become: yes
+
+- name: install virtualenv
   pip:
     name: virtualenv
-    executable: "{{ pip3_executable }}"
-    extra_args: --user
-
-  #- name: install python3-tk
-  #  apt:
-  #    name: python3-tk
-  #  become: yes
+    executable: "{{ os_pip3_executable }}"
+    #    extra_args: --user

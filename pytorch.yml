@@ -4,4 +4,6 @@
   roles:
     - ml
     - pytorch
-  environment: "{{proxy_env}}"
+  environment:
+    - "{{proxy_env}}"
+    - PATH: "{{ home }}/.local/bin:/usr/local/bin:{{ ansible_env.PATH }}"

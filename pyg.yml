@@ -2,5 +2,7 @@
 ---
 - hosts: all
   roles:
+    - ml
+    - pytorch
     - pyg
   environment: "{{proxy_env}}"
