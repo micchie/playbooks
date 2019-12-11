@@ -1,5 +1,0 @@
-- name: test
-  #  environment: "{{proxy_env}}"
-  command: env
-  register: test
-- debug: msg="{{ test.stdout }}"

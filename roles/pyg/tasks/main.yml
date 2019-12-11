@@ -1,14 +1,24 @@
 ---
-- name: Install PyTorch Geometoric in virtualenv
-  environment:
-    PATH: "{{ home }}/.local/bin:/usr/local/bin:{{ ansible_env.PATH }}"
+- name: Install dependencies of PyTorch Geometoric in virtualenv
   pip:
     name: "{{ item }}"
-    virtualenv: "{{ home }}/pytorch_env"
-    virtualenv_python: python3
+    virtualenv: "{{ venv_root }}/pytorch_env"
+    virtualenv_python: python3.7
   loop:
+    - scikit-learn
+    - scipy
     - torch-scatter
     - torch-sparse
     - torch-cluster
     - torch-spline-conv
-    - torch-geometric
+    - networkx
+    - plyfile
+    - pandas
+    - rdflib
+    - h5py
+    - decorator
+    - python-dateutil
+    - pytz
+    - pyparsing
+    - isodate
+    #    - torch-geometric

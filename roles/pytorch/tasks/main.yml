@@ -1,7 +1,5 @@
 ---
 - name: Install PyTorch in virtualenv
-  #environment:
-  #  PATH: "{{ home }}/.local/bin:/usr/local/bin:{{ ansible_env.PATH }}"
   pip:
     name: "{{ item }}"
     virtualenv: "{{ venv_root }}/pytorch_env"
@@ -9,3 +7,18 @@
   loop:
     - torch
     - torchvision
+    - torch-scatter
+    - torch-sparse
+    - torch-cluster
+    - scikit-learn
+    - scikit-image
+    - googledrivedownloader
+    - requests
+
+- name: Yield to regular user (cloudlab only)
+  #  include_tasks: cloudlab.yml
+  when: "'cloudlab' in group_names"
+  file:
+    path: "{{ venv_root }}/pytorch_env"
+    owner: "{{ ansible_ssh_user }}"
+    recurse: yes
