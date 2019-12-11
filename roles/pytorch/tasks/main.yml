@@ -16,9 +16,16 @@
     - requests
 
 - name: Yield to regular user (cloudlab only)
-  #  include_tasks: cloudlab.yml
   when: "'cloudlab' in group_names"
   file:
     path: "{{ venv_root }}/pytorch_env"
     owner: "{{ ansible_ssh_user }}"
     recurse: yes
+
+- name: symlink to user home
+  become_user: "{{ ansible_ssh_user }}"
+  when: "'cloudlab' in group_names"
+  file:
+    src: "{{ venv_root }}/pytorch_env"
+    dest: "~{{ ansible_ssh_user }}/pytorch_env" # XXX
+    state: link

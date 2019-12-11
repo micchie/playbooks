@@ -1,0 +1,6 @@
+# Debian provisioning
+---
+- hosts: cloudlab
+  become_user: "{{ ansible_ssh_user }}"
+  roles:
+    - cloudlab

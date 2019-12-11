@@ -1,0 +1,14 @@
+- name: upload ssh key
+  copy:
+    src: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa2"
+    dest: "{{ home }}/.ssh/id_rsa"
+    mode: '0600'
+
+- name: upload config files
+  copy:
+    src: "{{ lookup('env', 'HOME') }}/{{ item }}"
+    dest: "{{ home }}/"
+  loop:
+    - .zshrc
+    - .zshenv
+    - .screenrc
