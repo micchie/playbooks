@@ -46,6 +46,7 @@
     - name: create deployed directory
       become_user: "{{ user }}"
       file: path={{home}}/deployed owner={{user}} mode=0700 state=directory
+    - include: roles/homemisc/tasks/main.yml
       #    - name: serial console (comment out because boot gets slow)
       #      become: yes
       #      lineinfile: >-
