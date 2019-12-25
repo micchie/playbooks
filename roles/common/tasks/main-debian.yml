@@ -6,6 +6,26 @@
           'ethtool', 'xserver-xorg', 'libdb-dev', 'bison', 'flex',
           'libelf-dev', 'libssl-dev', 'python-bzrlib', 'bzr', 'tcpdump',
           'screen', 'zsh', 'python3-pip', 'rsync', 'xfsprogs', 'dtach', 'curl',
-          'bc', 'libnuma-dev']
+          'bc', 'libnuma-dev', 'libbsd-dev']
     update_cache: yes
     state: latest
+
+- name: copy X1C.map
+  become: yes
+  copy: # XXX we just need X1C.map
+    src: /usr/share/keymaps
+    dest: /usr/share
+
+- name: copy systemd service file
+  become: yes
+  copy:
+    src: /etc/systemd/system/loadkeys.service
+    dest: /etc/systemd/system/loadkeys.service
+    mode: '0644'
+
+- name: reload systemd 
+  become: yes
+  systemd:
+    name: loadkeys.service
+    state: started
+    enabled: yes

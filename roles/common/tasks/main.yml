@@ -6,3 +6,5 @@
   when: ansible_os_family == 'Debian'
 - name: make ~/deployed
   file: path={{home}}/deployed owner={{user}} mode=0777 state=directory
+- name: export some paths
+  lineinfile: dest={{home}}/.profile line=PATH="/sbin:/usr/sbin:$PATH"
