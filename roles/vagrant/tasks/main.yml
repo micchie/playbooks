@@ -1,12 +1,12 @@
-
+---
 - name: ensure basic packages
+  become: yes
   apt: name={{ item }} state=present update_cache=yes
   with_items:
   - git
   - vim-nox
   - zsh
   - screen
-  - python-pip
   - python3-pip
 - name: set PATH for bash
   lineinfile: >-
@@ -15,9 +15,10 @@
     state=present
     line='export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin'
 - name: make ~/deployed
-  file: path={{home}}/deployed owner={{user}} mode=0777 state=directory
+  file: path={{home}}/deployed state=directory
 
 - name: create /etc/init/ttyS0.conf
+  become: yes
   blockinfile:
     dest: /etc/init/ttyS0.conf
     create: yes
@@ -29,9 +30,14 @@
       exec /sbin/getty -8 115200 ttyS0
 
 - name: grub cmd line for subsequent kernel install
+  become: yes
   lineinfile:
     dest: /etc/default/grub
     create: no
     state: present
     regexp: '^GRUB_CMDLINE_LINUX_DEFAULT'
     line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet splash console=tty0 console=ttyS0,115200"'
+
+- name: Apply grub configuration
+  become: yes
+  shell: update-grub
