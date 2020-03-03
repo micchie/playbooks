@@ -54,9 +54,14 @@
       exec /sbin/getty -8 115200 ttyS0
 
 - name: grub cmd line for subsequent kernel install, including NVMM emulation
+  become: yes
   lineinfile:
     dest: /etc/default/grub
     create: no
     state: present
     regexp: '^GRUB_CMDLINE_LINUX_DEFAULT'
     line: 'GRUB_CMDLINE_LINUX_DEFAULT="memmap=1G!1G quiet splash console=tty0 console=ttyS0,115200"'
+
+- name: Apply grub configuration
+  become: yes
+  shell: update-grub
