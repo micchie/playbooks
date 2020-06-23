@@ -1,0 +1,21 @@
+- name: download wrk
+  become: no
+  git:
+    repo: https://github.com/wg/wrk.git
+    dest: "{{home}}/wrk"
+
+- name: make wrk
+  become: no
+  make:
+    chdir: "{{home}}/wrk"
+    target: all
+    params:
+       NUM_THREADS: 4
+
+- name: install wrk
+  become: yes
+  file:
+    src: "{{home}}/wrk/wrk"
+    dest: "/usr/local/bin/wrk"
+    state: link
+

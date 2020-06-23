@@ -1,13 +1,8 @@
 ---
-- name: set PATH for bash
-  lineinfile: >-
-    dest={{home}}/.bash_profile
-    create=yes
-    state=present
-    line='export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin'
-- name: make ~/deployed
-  file: path={{home}}/deployed state=directory
-
+#- file: path={{ ansible_env.HOME }}/deployed state=directory follow=yes
+  #- include: main-debian.yml
+  #when: ansible_os_family == 'Debian'
+  #
 - name: create /etc/init/ttyS0.conf
   become: yes
   blockinfile:

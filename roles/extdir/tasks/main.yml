@@ -1,0 +1,14 @@
+---
+- name: create deployed directory if not present
+  become: yes
+  file:
+    path: /local/deployed
+    state: directory
+    mode: '0777'
+
+- name: link it
+  file:
+    src: /local/deployed
+    dest: "{{ home }}/deployed"
+    force: yes
+    state: link

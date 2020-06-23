@@ -1,0 +1,36 @@
+---
+- name: Format XFS on the extra HDD
+  become: yes
+  filesystem:
+    fstype: xfs
+    dev: "{{extdisk}}"
+    force: no
+
+- name: Mount it
+  become: yes
+  mount:
+    path: /mnt/ext
+    src: "{{extdisk}}"
+    fstype: xfs
+    state: mounted
+
+- name: write to /etc/fstab
+  become: yes
+  lineinfile:
+    path: /etc/fstab
+    regexp: '^"{{extdisk}}"'
+    line: '{{extdisk}} /mnt/ext defaults,noatime 0 0'
+
+- name: create deployed directory if not present
+  become: yes
+  file:
+    path: /mnt/ext/deployed
+    state: directory
+    mode: '0777'
+
+- name: link it
+  file:
+    src: /mnt/ext/deployed
+    dest: "{{ home }}/deployed"
+    force: yes
+    state: link

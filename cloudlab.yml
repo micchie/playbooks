@@ -1,6 +1,9 @@
 # Debian provisioning
 ---
-- hosts: cloudlab
-  become_user: "{{ ansible_ssh_user }}"
+- hosts: all
+  #  become_user: "{{ ansible_ssh_user }}"
   roles:
+    - linux
+    - kernel
     - homemisc
+    - extdir

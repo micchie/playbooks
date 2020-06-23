@@ -1,32 +1,19 @@
 - name: install common Debian packages
   become: yes
   apt:
-    pkg: ['build-essential', 'zlib1g-dev', 'autoconf',
-          'automake', 'pkg-config', 'git', 'mercurial', 'libncurses5-dev',
-          'ethtool', 'xserver-xorg', 'libdb-dev', 'bison', 'flex',
-          'libelf-dev', 'libssl-dev', 'python-bzrlib', 'bzr', 'tcpdump',
-          'screen', 'zsh', 'python3-pip', 'rsync', 'xfsprogs', 'dtach', 'curl',
-          'bc', 'libnuma-dev', 'libbsd-dev']
+    pkg: ['vim-nox', 'build-essential', 'zlib1g-dev', 'autoconf',
+          'automake', 'pkg-config', 'git', 'libncurses5-dev',
+          'ethtool', 'xserver-xorg', 'libdb-dev',
+          'libelf-dev', 'libssl-dev', 'bzr', 'tcpdump',
+          'screen', 'zsh', 'rsync', 'xfsprogs', 'hfsprogs', 'curl',
+          'libnuma-dev', 'libbsd-dev']
     update_cache: yes
     state: latest
 
-- name: copy X1C.map
-  become: yes
-  ignore_errors: true
-  copy: # XXX we just need X1C.map
-    src: /usr/share/keymaps
-    dest: /usr/share
-
-- name: copy systemd service file
-  become: yes
-  copy:
-    src: /etc/systemd/system/loadkeys.service
-    dest: /etc/systemd/system/loadkeys.service
-    mode: '0644'
-
-- name: reload systemd 
-  become: yes
-  systemd:
-    name: loadkeys.service
-    state: started
-    enabled: yes
+#- name: set PATH for bash
+#  become: yes
+#  lineinfile: >-
+#    dest={{home}}/.bash_profile
+#    create=yes
+#    state=present
+#    line='export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin'

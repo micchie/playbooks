@@ -1,10 +1,11 @@
 ---
 # This playbook contains common plays that will be run on all nodes
 
-- file: path={{ ansible_env.HOME }}/deployed state=directory follow=yes
+#- file: path={{ ansible_env.HOME }}/deployed state=directory follow=yes
 - include: main-debian.yml
   when: ansible_os_family == 'Debian'
 - name: make ~/deployed
   file: path={{home}}/deployed state=directory
-- name: export some paths
-  lineinfile: dest={{home}}/.profile line=PATH="/sbin:/usr/sbin:$PATH"
+#- name: export some paths
+#  lineinfile: dest={{home}}/.profile
+#    line=PATH="/sbin:/usr/sbin:$PATH"

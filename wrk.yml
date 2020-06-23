@@ -1,0 +1,5 @@
+# Debian provisioning
+---
+- hosts: all
+  roles:
+    - wrk

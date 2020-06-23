@@ -8,60 +8,20 @@
   apt:
     #libjson-c-dev - asciidoc are required for ndctl
     pkg:
-      - ethtool
-      - autoconf
-      - automake
       - gcc
-      - build-essential
       - libtool
       - libncurses-dev
-      - tcpdump
-      - hfsprogs
       - elfutils
       - libdw-dev
       - gettext
-      - flex
-      - bison
-      - pkg-config
       - libjson-c-dev
       - uuid-dev
       - libudev-dev
       - libkmod-dev
-      - asciidoc
+#      - asciidoc
       - libssl-dev
+      - bison
+      - flex
       - bc
-      - xfsprogs
     state: latest
     update_cache: yes
-
-- name: set PATH for bash}
-  become: yes
-  lineinfile: >-
-    dest={{home}}/.bash_profile
-    create=yes
-    state=present
-    line='export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin'
-- name: create /etc/init/ttyS0.conf
-  become: yes
-  blockinfile:
-    dest: /etc/init/ttyS0.conf
-    create: yes
-    state: present
-    block: |
-      start on stopped rc RUNLEVEL=[2345]
-      stop on runlevel [!2345]
-      respawn
-      exec /sbin/getty -8 115200 ttyS0
-
-- name: grub cmd line for subsequent kernel install, including NVMM emulation
-  become: yes
-  lineinfile:
-    dest: /etc/default/grub
-    create: no
-    state: present
-    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT'
-    line: 'GRUB_CMDLINE_LINUX_DEFAULT="memmap=1G!1G quiet splash console=tty0 console=ttyS0,115200"'
-
-- name: Apply grub configuration
-  become: yes
-  shell: update-grub

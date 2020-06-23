@@ -1,4 +1,4 @@
 ---
-ansible_ssh_user: micchie
-ansible_become: yes	
+ansible_ssh_user: michio
 venv_root: "/usr/local"
+extdisk: "/dev/sda4"
